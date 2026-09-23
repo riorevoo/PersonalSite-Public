@@ -1,0 +1,3 @@
+#!/bin/sh
+# Fast checks on what is staged. Enable with: git config core.hooksPath .githooks
+exec uv run --no-project python scripts/git_hooks.py pre-commit "$@"

@@ -1,0 +1,75 @@
+/*
+ * As wide as the window and carrying the page's dot grid (same tokens, and the same origin as the
+ * body, so the dots line up), so it reads as part of the page. The design's own bar hides the dots
+ * under its tint; showing them is a deliberate deviation.
+ */
+.bar {
+  background-color: var(--color-topbar-bg);
+  background-image: var(--dot-grid);
+  background-size: var(--dot-grid-size);
+  border-bottom: 1px solid var(--color-rule-topbar);
+}
+
+/* The content stays in the design's 1100px column. */
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 30px;
+}
+
+.left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-height: 20px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  font: 700 13px/1 var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.reset {
+  padding: 0;
+  font: 400 10.5px/1 var(--font-mono);
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The blog link and the about button share one look; the link needs its own colour on hover. */
+.pill,
+.pill:hover {
+  display: inline-block;
+  padding: 9px 13px;
+  font: 400 11px/1 var(--font-mono);
+  color: var(--color-ink);
+  text-decoration: none;
+  background: var(--color-chip);
+  border: 1px solid var(--color-ink);
+  box-shadow: var(--shadow-chip);
+  transition: var(--transition-hover);
+}
+
+.pill:hover {
+  background: var(--color-lime);
+}
+
+@media (max-width: 600px) {
+  .inner {
+    flex-wrap: wrap;
+    row-gap: 10px;
+    padding: 12px 16px;
+  }
+}

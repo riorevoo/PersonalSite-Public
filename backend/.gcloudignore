@@ -1,0 +1,15 @@
+# What `gcloud run deploy --source backend` must not upload (it mirrors .dockerignore).
+.git
+.env
+.env.*
+!.env.example
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.coverage*
+htmlcov
+tests
+evals

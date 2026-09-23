@@ -1,0 +1,71 @@
+/* A non-modal <dialog open>: reset its native centring so it sits under the top-right button. */
+.popover {
+  position: absolute;
+  inset: 62px 30px auto auto;
+  z-index: 5;
+  width: 330px;
+  height: auto;
+  max-height: calc(100vh - 78px);
+  max-height: calc(100dvh - 78px);
+  margin: 0;
+  padding: 20px 22px 22px;
+  overflow-y: auto;
+  color: inherit;
+  background: var(--color-card);
+  border: 1px solid var(--color-ink);
+  box-shadow: var(--shadow-popover);
+}
+
+/* The container is only a programmatic focus target; its children keep the focus ring. */
+.popover:focus {
+  outline: none;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.name {
+  font: var(--type-name-sm);
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.tagline {
+  margin-top: 6px;
+  font: 400 10px/1.6 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--color-blue);
+  text-transform: uppercase;
+}
+
+.close {
+  padding: 3px 6px;
+  font: 700 12px/1 var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.bio {
+  margin-top: 16px;
+  font: var(--type-body-sm);
+  color: var(--color-text-prose);
+  text-wrap: pretty;
+}
+
+.facts {
+  margin-top: 14px;
+}
+
+.links {
+  margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+  .popover {
+    inset: 62px 16px auto;
+    width: auto;
+  }
+}

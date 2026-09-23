@@ -1,0 +1,26 @@
+.table {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 2px;
+  border-top: 1px solid var(--color-rule);
+  font: 400 11.5px/1.4 var(--font-mono);
+}
+
+.row:last-child {
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.label {
+  color: var(--color-text-muted);
+}
+
+.value {
+  color: var(--color-ink);
+  text-align: right;
+}

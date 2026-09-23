@@ -1,0 +1,76 @@
+/*
+ * Full width, so the scroll area's scrollbar is at the window's right edge. The design is a 1100px
+ * frame; .column keeps that width, centred on the dot grid, inside each band.
+ */
+.shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Only this area scrolls; the top bar and footer stay put. */
+.scroll {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.column {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Grows to fill the scroll area, so children can centre or bottom-pin themselves with auto margins. */
+.scroll > .column {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  padding: 34px 40px;
+}
+
+.footer > .column {
+  padding: 0 40px 30px;
+}
+
+/* A zero-height frame the width of the column: the popover positions itself inside it. */
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  max-width: 1100px;
+  height: 0;
+  margin: 0 auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scroll {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (max-width: 600px) {
+  .scroll > .column {
+    padding: 24px 16px;
+  }
+
+  .footer > .column {
+    padding: 0 16px 16px;
+  }
+}
+
+/* Reading pages (Writing, a post) use the blog design's padding; each page adds its own bottom. */
+.scroll[data-layout='reading'] > .column {
+  padding: 38px 40px 0;
+}
+
+@media (max-width: 600px) {
+  .scroll[data-layout='reading'] > .column {
+    padding: 24px 16px 0;
+  }
+}

@@ -1,0 +1,20 @@
+.bubble {
+  align-self: flex-end;
+  max-width: 58%;
+  padding: 12px 16px;
+  background: var(--color-blue);
+  border: 1px solid var(--color-blue-border);
+}
+
+.text {
+  font: var(--type-mono-body);
+  color: #fff;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 600px) {
+  .bubble {
+    max-width: 85%;
+  }
+}

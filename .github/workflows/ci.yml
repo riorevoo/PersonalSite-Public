@@ -1,0 +1,171 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push to the same branch or PR replaces a run that is still going.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Repository rules: no em dashes, no local-only files, no Claude trailers, noreply authors.
+  house-rules:
+    runs-on: ubuntu-24.04 # pinned: ubuntu-latest moves to 26 on 2026-10-19
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the rules also read the commit history
+      - uses: astral-sh/setup-uv@v10.1.0
+      - run: uv run --no-project python scripts/git_hooks.py ci
+
+  backend:
+    runs-on: ubuntu-24.04 # pinned: ubuntu-latest moves to 26 on 2026-10-19
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # diff-cover compares against the base branch
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - run: uv sync --locked
+      - run: uv run ruff check . ../scripts --config pyproject.toml
+      - run: uv run ruff format --check . ../scripts --config pyproject.toml
+      - run: uv run mypy
+      # Fails below 90% total coverage (pyproject.toml).
+      - run: uv run pytest -q --cov-report=xml
+      # coverage.py cannot gate per file, so on PRs every changed line must be covered too.
+      - name: Changed lines are covered
+        if: github.event_name == 'pull_request'
+        run: uv run diff-cover coverage.xml --compare-branch=origin/${{ github.base_ref }} --fail-under=90
+      - name: Known vulnerabilities in runtime dependencies
+        run: |
+          uv export --no-dev --no-hashes --no-emit-project -o requirements-audit.txt
+          uvx pip-audit -r requirements-audit.txt --disable-pip --no-deps
+
+  frontend:
+    runs-on: ubuntu-24.04 # pinned: ubuntu-latest moves to 26 on 2026-10-19
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      # Regenerates the API types from backend/openapi.json and fails if they differ from the commit.
+      - run: npm run types:check
+      # Fails below the per-file coverage thresholds (vite.config.ts).
+      - run: npm run test:coverage
+      - run: npm run build
+      - name: Known vulnerabilities
+        run: npm audit --audit-level=high
+
+  e2e:
+    runs-on: ubuntu-24.04 # pinned: ubuntu-latest moves to 26 on 2026-10-19
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - run: uv sync --locked
+        working-directory: backend
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      # Starts its own backend and frontend (playwright.config.ts). Visual specs run locally only.
+      - run: npm run e2e
+        working-directory: frontend
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 7
+
+  public-copy:
+    if: vars.PUBLIC_EXPORT_ENABLED == 'true'
+    runs-on: ubuntu-24.04 # pinned: ubuntu-latest moves to 26 on 2026-10-19
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Build sanitized public tree
+        env:
+          PUBLIC_DIR: ${{ runner.temp }}/public-repo
+        run: uv run --no-project python scripts/public_copy.py "$PUBLIC_DIR"
+      - name: Scan the public tree for secrets
+        run: >-
+          docker run --rm
+          -v "$RUNNER_TEMP/public-repo:/scan:ro"
+          ghcr.io/gitleaks/gitleaks:v8.30.0
+          dir /scan --redact
+      - name: Create public-only history for validation
+        working-directory: ${{ runner.temp }}/public-repo
+        run: |
+          git init --initial-branch=main
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add --all
+          git commit -m "Automated public export"
+      - name: Install public-copy dependencies
+        run: |
+          uv --directory "$RUNNER_TEMP/public-repo/backend" sync --locked
+          npm ci --prefix "$RUNNER_TEMP/public-repo/frontend"
+          cd "$RUNNER_TEMP/public-repo/frontend"
+          npx playwright install --with-deps chromium
+      - name: Run every public-copy check
+        working-directory: ${{ runner.temp }}/public-repo
+        run: uv run --no-project python scripts/check.py
+      - name: Remove generated and installed files
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        working-directory: ${{ runner.temp }}/public-repo
+        run: |
+          test "$(realpath "$PWD")" = "$(realpath "$RUNNER_TEMP/public-repo")"
+          git clean -ffdX
+      - name: Package public copy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        working-directory: ${{ runner.temp }}
+        run: |
+          tar --create --gzip --exclude=.git --file public-repo.tar.gz --directory public-repo .
+          sha256sum public-repo.tar.gz > public-repo.sha256
+      - uses: actions/upload-artifact@v7
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          name: public-repo-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/public-repo.tar.gz
+            ${{ runner.temp }}/public-repo.sha256
+          retention-days: 1
+          if-no-files-found: error

@@ -1,0 +1,79 @@
+.page {
+  max-width: 660px;
+  margin: 0 auto;
+  padding-bottom: 52px;
+}
+
+.meta {
+  margin-top: 26px;
+  font: var(--type-eyebrow);
+  letter-spacing: 0.14em;
+  color: var(--color-blue);
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: 16px;
+  font: 700 30px/1.22 var(--font-display);
+  letter-spacing: -0.04em;
+  color: var(--color-ink);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.dek {
+  margin-top: 16px;
+  font: 300 17px/1.62 var(--font-body);
+  color: var(--color-text-prose);
+  text-wrap: pretty;
+}
+
+.rule {
+  max-width: 120px;
+  height: 6px;
+  margin: 26px 0 30px;
+  background: var(--color-lime);
+}
+
+.ask {
+  padding: 18px 20px;
+  margin-top: 34px;
+  background: var(--color-card);
+  border: 1px solid var(--color-ink);
+  box-shadow: var(--shadow-callout);
+}
+
+.askLabel {
+  font: 700 9.5px/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chip {
+  padding: 8px 12px;
+  font: var(--type-mono-ui);
+  color: var(--color-ink);
+  text-align: left;
+  background: var(--color-chip);
+  border: 1px solid var(--color-ink);
+  box-shadow: var(--shadow-chip);
+  transition: var(--transition-hover);
+}
+
+.chip:hover {
+  background: var(--color-lime);
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 24px;
+  }
+}

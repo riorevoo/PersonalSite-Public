@@ -1,0 +1,64 @@
+@import '@fontsource/chivo/300.css';
+@import '@fontsource/chivo/400.css';
+@import '@fontsource/chivo/500.css';
+@import '@fontsource/chivo/700.css';
+@import '@fontsource/martian-mono/600.css';
+@import '@fontsource/martian-mono/700.css';
+@import '@fontsource/space-mono/400.css';
+@import '@fontsource/space-mono/700.css';
+@import './styles/tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  background-image: var(--dot-grid);
+  background-size: var(--dot-grid-size);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-blue);
+}
+
+a:hover {
+  color: var(--color-blue-hover);
+}
+
+/* Reset native button chrome; components add their own look. */
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+button:disabled,
+button[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}

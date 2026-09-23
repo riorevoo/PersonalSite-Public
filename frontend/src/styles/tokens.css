@@ -1,0 +1,61 @@
+/*
+ * Design tokens, lifted verbatim from the design reference files (kept offline by the owner).
+ * Every colour, font, type preset and shadow in the UI should come from here.
+ */
+:root {
+  /* Surfaces */
+  --color-bg: #f4f1e8;
+  --color-bg-dot: rgba(25, 23, 20, 0.15);
+  --color-topbar-bg: rgba(244, 241, 232, 0.9);
+  --color-card: #fffdf7;
+  --color-card-hover: rgba(255, 253, 247, 0.75);
+  --color-chip: #efeadc;
+
+  /* Ink */
+  --color-ink: #191714;
+  --color-text-answer: #211e1a;
+  --color-text-prose: #3e3932;
+  --color-text-muted: #5f594e;
+  --color-rule: rgba(25, 23, 20, 0.18);
+  --color-rule-topbar: rgba(25, 23, 20, 0.16);
+  --color-answer-border: rgba(25, 23, 20, 0.2);
+
+  /* Accents */
+  --color-blue: #3355d8;
+  --color-blue-hover: #1f3aa8;
+  --color-blue-border: #24409f;
+  --color-lime: #b9f227;
+
+  /* Font families */
+  --font-body: 'Chivo', system-ui, sans-serif;
+  --font-display: 'Martian Mono', monospace;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Type presets (font shorthand: weight size/line-height family) */
+  --type-name: 700 20px/1.2 var(--font-display);
+  --type-name-sm: 700 13px/1.2 var(--font-display);
+  --type-headline: 700 25px/1.32 var(--font-display);
+  --type-eyebrow: 400 10.5px/1 var(--font-mono);
+  --type-body: 300 15.5px/1.72 var(--font-body);
+  --type-body-sm: 300 13px/1.6 var(--font-body);
+  --type-mono-ui: 400 11.5px/1 var(--font-mono);
+  --type-mono-body: 400 14px/1.6 var(--font-mono);
+
+  /* Hard offset shadows */
+  --shadow-chip: 2px 2px 0 var(--color-ink);
+  --shadow-composer: 3px 3px 0 rgba(25, 23, 20, 0.14);
+  --shadow-answer: 3px 3px 0 rgba(25, 23, 20, 0.09);
+  --shadow-callout: 3px 3px 0 rgba(25, 23, 20, 0.12);
+  --shadow-popover: 5px 6px 0 rgba(25, 23, 20, 0.16);
+
+  /* Background dot grid */
+  --dot-grid: radial-gradient(var(--color-bg-dot) 1px, transparent 1px);
+  --dot-grid-size: 20px 20px;
+
+  /* Interaction */
+  --focus-ring: 2px solid var(--color-blue);
+  --focus-offset: 2px;
+  --transition-hover: background-color 0.12s ease;
+
+  /* Breakpoint reference (custom properties cannot be used in media queries): 600px */
+}

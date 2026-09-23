@@ -1,0 +1,67 @@
+[project]
+name = "personal-site-backend"
+version = "0.1.0"
+description = "FastAPI backend for the chat-style personal site: answers questions about the site owner."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=1.7.0",
+    "fastapi[standard]>=0.115",
+    "google-cloud-firestore>=2.31.0",
+    "pydantic-settings>=2.4",
+    "pyyaml>=6.0.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "httpx2>=2.13",
+    "ruff>=0.6",
+    "mypy>=2.3.1",
+    "pytest-cov>=7.1.0",
+    "types-pyyaml>=6.0.12.20260906",
+    "diff-cover>=10.5.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=app --cov-report=term-missing -m 'not eval'"
+markers = ["eval: calls the real LLM API and costs money; run with: pytest -m eval --no-cov"]
+
+[tool.coverage.run]
+branch = true
+source = ["app"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "\\.\\.\\.",
+    "if __name__ == .__main__.:",
+]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+files = ["app", "tests"]
+# The repo-level scripts/ (git hooks, check runner) are imported by tests, so they are type-checked.
+mypy_path = ["../scripts"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "N", "RUF", "PT", "S", "C4"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S603", "S607"]
+# The scripts exist to run the project's own tools, so subprocess use is expected there.
+"../scripts/**" = ["S603", "S607"]

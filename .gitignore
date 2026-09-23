@@ -1,0 +1,41 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Node / Vite
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+blob-report/
+*.tsbuildinfo
+.firebase/
+
+# Short-lived credentials created by google-github-actions/auth.
+gha-creds-*.json
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Personal work tracking and AI agent notes (not for git)
+project_tracker.md
+CLAUDE.md
+.claude/settings.local.json
+
+# Deployment settings for the real site address (the .example.yaml template is committed)
+deploy/env.production.yaml

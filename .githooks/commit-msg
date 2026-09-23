@@ -1,0 +1,3 @@
+#!/bin/sh
+# Rejects Claude co-author trailers and dashes in the message.
+exec uv run --no-project python scripts/git_hooks.py commit-msg "$@"

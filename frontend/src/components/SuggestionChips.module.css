@@ -1,0 +1,48 @@
+/* A <fieldset> (with a hidden legend) groups the chips for assistive tech; reset its chrome. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  margin-bottom: 14px;
+  border: 0;
+}
+
+.chip {
+  padding: 9px 13px;
+  font: var(--type-mono-ui);
+  color: var(--color-ink);
+  background: var(--color-chip);
+  border: 1px solid var(--color-ink);
+  box-shadow: var(--shadow-chip);
+  transition: var(--transition-hover);
+}
+
+.chip[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.chip:hover:not([aria-disabled='true']) {
+  background: var(--color-lime);
+}
+
+/*
+ * On phones keep the chips on one swipeable line instead of stacking three rows. The padding (with
+ * a matching negative margin) leaves room for the focus ring, which overflow would otherwise clip.
+ */
+@media (max-width: 600px) {
+  .chips {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding: 6px;
+    margin: -6px -6px 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .chip {
+    flex: none;
+  }
+}

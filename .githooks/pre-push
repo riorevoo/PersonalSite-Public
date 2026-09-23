@@ -1,0 +1,4 @@
+#!/bin/sh
+# The full check (lint, types, tests, build) before anything leaves your machine.
+# Skip once with: git push --no-verify
+exec uv run --no-project python scripts/git_hooks.py pre-push "$@"

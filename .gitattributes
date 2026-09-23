@@ -1,0 +1,17 @@
+# Text files use LF in the repository and in every checkout (Windows included), so formatters,
+# linters and the OpenAPI/type generators see the same bytes everywhere.
+* text=auto eol=lf
+
+# Binary assets are never converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+
+# Generated files: collapse in diffs and reviews.
+backend/openapi.json linguist-generated=true
+frontend/src/api/schema.d.ts linguist-generated=true

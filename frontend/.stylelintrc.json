@@ -1,0 +1,7 @@
+{
+  "extends": ["stylelint-config-recommended"],
+  "rules": {
+    "declaration-no-important": true,
+    "selector-pseudo-class-no-unknown": [true, { "ignorePseudoClasses": ["global", "local"] }]
+  }
+}

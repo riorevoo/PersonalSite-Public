@@ -1,0 +1,20 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  list-style: none;
+}
+
+.center {
+  justify-content: center;
+}
+
+.start {
+  justify-content: flex-start;
+}
+
+.link {
+  font: 400 12px/1.4 var(--font-mono);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

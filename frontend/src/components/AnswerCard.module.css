@@ -1,0 +1,82 @@
+.card {
+  max-width: 78%;
+  padding: 16px 18px;
+  background: var(--color-card);
+  border: 1px solid var(--color-answer-border);
+  box-shadow: var(--shadow-answer);
+}
+
+/* Only a programmatic focus target (after "try again"); the button inside keeps its ring. */
+.card:focus {
+  outline: none;
+}
+
+.eyebrow {
+  margin-bottom: 9px;
+  font: 700 9.5px/1 var(--font-mono);
+  letter-spacing: 0.18em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.text,
+.thinking {
+  display: block;
+  font: 400 14px/1.8 var(--font-mono);
+  color: var(--color-text-answer);
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.dots span {
+  animation: blink 1.2s infinite steps(1);
+}
+
+.dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dots span {
+    animation: none;
+  }
+}
+
+.retry {
+  margin-top: 12px;
+  padding: 8px 11px;
+  font: 700 10px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  color: var(--color-ink);
+  text-transform: uppercase;
+  background: var(--color-chip);
+  border: 1px solid var(--color-ink);
+  box-shadow: var(--shadow-chip);
+  transition: var(--transition-hover);
+}
+
+.retry:hover {
+  background: var(--color-lime);
+}
+
+@media (max-width: 600px) {
+  .card {
+    max-width: 100%;
+  }
+}
